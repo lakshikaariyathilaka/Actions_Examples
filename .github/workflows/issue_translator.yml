@@ -1,18 +1,25 @@
-name: 'issue-translator'
-on: 
-  issue_comment: 
-    types: [created]
-  issues: 
+
+name: Issue Translator
+
+on:
+  issues:
     types: [opened]
+  issue_comment:
+    types: [created]
+
+# Grant only the permissions needed by this workflow.
+permissions:
+  issues: write
 
 jobs:
-  build:
+  translate:
+    name: Translate issue content
     runs-on: ubuntu-latest
+
     steps:
-      - uses: usthe/issues-translate-action@v2.7
+      - name: Translate non-English issues
+        uses: usthe/issues-translate-action@v2.7
         with:
           IS_MODIFY_TITLE: false
-          # not require, default false, . Decide whether to modify the issue title
-          # if true, the robot account @Issues-translate-bot must have modification permissions, invite @Issues-translate-bot to your project or use your custom bot.
-          CUSTOM_BOT_NOTE: Bot detected the issue body's language is not English, translate it automatically. 👯👭🏻🧑‍🤝‍🧑👫🧑🏿‍🤝‍🧑🏻👩🏾‍🤝‍👨🏿👬🏿
-          # not require. Customize the translation robot prefix message.
+          CUSTOM_BOT_NOTE: "Bot detected a non-English issue and will translate it automatically."
+
